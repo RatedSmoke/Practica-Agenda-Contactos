@@ -1,0 +1,37 @@
+# Compilados Python
+*.pyc
+*.pyo
+*.swp
+__pycache__/
+
+# Empaquetados
+*.zip
+*.tar
+*.tgz
+*.apk
+*.sql
+
+# Logs
+*.log
+
+# Django
+/tmp/*
+/misc/*.xlsx
+*/migrations/*
+db.sqlite3
+media/
+
+# Entorno virtual
+env_practica_agenda/
+.python-version
+
+# IDEs
+.vscode/settings.json
+.pylintrc
+
+# Sistema
+.DS_Store
+.Identifier
+
+# Variables de entorno
+.env
