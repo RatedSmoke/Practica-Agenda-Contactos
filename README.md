@@ -6,7 +6,8 @@ API REST desarrollada con Django REST Framework.
 ## Requisitos
 
 - Python 3.9.18+
-- PostgreSQL 15+
+- PostgreSQL 16+
+- [Postman](https://www.postman.com/downloads/) — para probar los endpoints
 
 ## Pasos para instalar el proyecto
 
@@ -39,7 +40,7 @@ Entra a psql y ejecuta:
 
 ```sql
 CREATE DATABASE nombre_de_tu_bd;
-CREATE USER nombre_de_tu_usuario WITH PASSWORD 'password_de_tu_bd';
+CREATE USER nombre_de_tu_usuario WITH PASSWORD 'password_usuario_de_tu_bd';
 GRANT ALL PRIVILEGES ON DATABASE nombre_de_tu_bd TO nombre_de_tu_usuario;
 GRANT ALL ON SCHEMA public TO nombre_de_tu_usuario;
 ALTER DATABASE nombre_de_tu_bd OWNER TO nombre_de_tu_usuario;
@@ -60,3 +61,27 @@ python manage.py cargar_estados
 ### 8. Correr el servidor
 ```bash
 python manage.py runserver
+
+## Colección Postman
+
+En la raíz del proyecto encontrarás el archivo `Practica_Agenda_API.postman_collection.json`.
+
+### Importar a Postman
+
+1. Abre **Postman**
+2. Clic en **Import** (arriba a la izquierda)
+3. Arrastra el archivo `Practica_Agenda_API.postman_collection.json` o selecciónalo con **Choose Files**
+4. Clic en **Import**
+
+### Endpoints disponibles
+
+| Método | URL | Descripción |
+|--------|-----|-------------|
+| GET | `/api/contactos/` | Listado paginado de contactos |
+| GET | `/api/contactos/?search=tony` | Búsqueda por nombre, apellidos o teléfono |
+| POST | `/api/contactos/` | Crear contacto |
+| GET | `/api/contactos/<id>/` | Detalle del contacto |
+| PUT | `/api/contactos/<id>/` | Actualizar contacto |
+| DELETE | `/api/contactos/<id>/` | Eliminar contacto |
+
+> Después de crear un contacto con el POST, copia el `id` de la respuesta y actualiza la variable `contacto_id` en Postman para probar el GET, PUT y DELETE.
