@@ -6,6 +6,7 @@ class Contacto(models.Model):
     apellidos   = models.CharField(max_length=120, blank=True)
     fotografia  = models.ImageField(upload_to='fotos_contactos/', blank=True)
     fecha_nacio = models.DateField(blank=True, null=True)
+    activo      = models.BooleanField(default=True)
 
     class Meta:
         verbose_name        = 'Contacto'
@@ -24,6 +25,7 @@ class Direccion(models.Model):
     municipio       = models.CharField(max_length=255)
     estado          = models.ForeignKey(Estado, on_delete=models.PROTECT)
     referencias     = models.TextField(blank=True)
+    activo          = models.BooleanField(default=True)
 
     class Meta:
         verbose_name        = 'Dirección'
@@ -42,6 +44,7 @@ class Telefono(models.Model):
     tipo     = models.IntegerField(choices=TIPO_CHOICES, default=2)
     alias    = models.CharField(max_length=255, blank=True)
     numero   = models.CharField(max_length=50)
+    activo   = models.BooleanField(default=True)
 
     class Meta:
         verbose_name        = 'Teléfono'
@@ -49,3 +52,4 @@ class Telefono(models.Model):
 
     def __str__(self):
         return f"{self.numero} - {self.get_tipo_display()} - {self.contacto}"
+    
