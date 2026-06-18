@@ -52,6 +52,11 @@ ALTER DATABASE nombre_de_tu_bd OWNER TO nombre_de_tu_usuario;
 python manage.py migrate
 ```
 
-### 7. Correr el servidor
+### 7. Llenar catálogo de Estados
+```bash
+python manage.py cargar_estados
+```
+
+### 8. Correr el servidor
 ```bash
 python manage.py runserver
