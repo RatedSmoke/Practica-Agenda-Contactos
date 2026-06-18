@@ -72,7 +72,6 @@ En la raíz del proyecto encontrarás el archivo `Practica_Agenda_API.postman_co
 1. Abre **Postman**
 2. Clic en **Import** (arriba a la izquierda)
 3. Arrastra el archivo `Practica_Agenda_API.postman_collection.json` o selecciónalo con **Choose Files**
-4. Clic en **Import**
 
 ### Endpoints disponibles
 
