@@ -9,7 +9,7 @@ from django.db import transaction
 class EstadoSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Estado
+        model  = Estado
         fields = ['id', 'clave', 'nombre']
 
 # Serializer de Teléfonos
@@ -17,14 +17,22 @@ class EstadoSerializer(serializers.ModelSerializer):
 # Maneja la información de cada teléfono asociado a un contacto
 class TelefonoSerializer(serializers.ModelSerializer):
 
+    tipo_display = serializers.CharField(
+        source='get_tipo_display',
+        read_only=True
+    )
+
     class Meta:
-        model = Telefono
-        fields = ['id', 'tipo', 'alias', 'numero']
+        model  = Telefono
+        fields = ['id', 'tipo', 'tipo_display', 'alias', 'numero']
 
 # Serializer de Direcciones
 # Convierte objetos Dirección a JSON y viceversa
 # Maneja la información de la dirección del contacto
+# estado_info muestra la información completa del estado además del id
 class DireccionSerializer(serializers.ModelSerializer):
+
+    estado = serializers.CharField()
 
     # Muestra la información del Estado además del id
     estado_info = EstadoSerializer(
@@ -33,10 +41,23 @@ class DireccionSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Direccion
+        model  = Direccion
         fields = ['id', 'calle', 'numero_exterior', 'numero_interior',
             'colonia', 'municipio', 'estado', 'estado_info', 'referencias'
         ]
+
+    # Valida que el estado exista en el catálogo
+    def validate_estado(self, value):
+        try:
+            return Estado.objects.get(
+                nombre__icontains=value,
+                activo=True
+            )
+        except Estado.DoesNotExist:
+            raise serializers.ValidationError(
+                'El estado no existe.'
+            )
+
 
 # Serializer de Contactos
 # Maneja la información anidada (Relación a Teléfono y Dirección)
@@ -47,12 +68,18 @@ class ContactoSerializer(serializers.ModelSerializer):
     direccion = DireccionSerializer()
 
     # Relación con Teléfonos
-    telefonos = TelefonoSerializer(many=True)
+    telefonos = serializers.SerializerMethodField()
 
     class Meta:
-        model = Contacto
+        model  = Contacto
         fields = ['id', 'nombre', 'apellidos', 'fotografia', 'fecha_nacio',
-            'direccion', 'telefonos']
+                'direccion', 'telefonos'
+            ]
+
+    # Retorna solo los teléfonos activos del contacto
+    def get_telefonos(self, obj):
+        telefonos_activos = obj.telefonos.filter(activo=True)
+        return TelefonoSerializer(telefonos_activos, many=True).data
 
     # Crear contacto
     # Se ejecuta en serializer.save()
@@ -61,7 +88,7 @@ class ContactoSerializer(serializers.ModelSerializer):
 
         # Extraemos la información anidada
         direccion_data = validated_data.pop('direccion')
-        telefonos_data = validated_data.pop('telefonos')
+        telefonos_data = validated_data.pop('telefonos', [])
 
         # Creamos el contacto
         contacto = Contacto.objects.create(**validated_data)
@@ -93,12 +120,12 @@ class ContactoSerializer(serializers.ModelSerializer):
         # Actualizamos los campos del contacto
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-
+            
         instance.save()
 
         # Actualizamos la dirección
         if direccion_data is not None:
-
+            
             direccion = instance.direccion
 
             for attr, value in direccion_data.items():
@@ -109,25 +136,27 @@ class ContactoSerializer(serializers.ModelSerializer):
         # Actualizamos teléfonos
         # Desactivar anteriores y crear nuevos
         if telefonos_data is not None:
-
             instance.telefonos.update(activo=False)
-
-            for telefono_data in telefonos_data:
+            for tel_data in telefonos_data:
                 Telefono.objects.create(
                     contacto=instance,
-                    **telefono_data
+                    **tel_data
                 )
 
         return instance
 
 # Serializer para Listar Nombre y Teléfonos
+# Solo muestra los campos necesarios para el listado
 class ContactoListadoSerializer(serializers.ModelSerializer):
 
-    telefonos = TelefonoSerializer(
-        many=True,
-        read_only=True
-    )
+    # Relación con Teléfonos
+    telefonos = serializers.SerializerMethodField()
 
     class Meta:
-        model = Contacto
+        model  = Contacto
         fields = ['id', 'nombre', 'apellidos', 'telefonos']
+
+    # Retorna solo los teléfonos activos del contacto
+    def get_telefonos(self, obj):
+        telefonos_activos = obj.telefonos.filter(activo=True)
+        return TelefonoSerializer(telefonos_activos, many=True).data
