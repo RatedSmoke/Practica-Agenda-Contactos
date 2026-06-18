@@ -61,6 +61,7 @@ python manage.py cargar_estados
 ### 8. Correr el servidor
 ```bash
 python manage.py runserver
+```
 
 ## Colección Postman
 
