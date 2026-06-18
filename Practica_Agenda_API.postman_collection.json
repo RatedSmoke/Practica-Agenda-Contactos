@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "Práctica Agenda Contactos",
+    "description": "Colección para validar los endpoints de la Práctica Agenda de Contactos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "contacto_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Listado de Contactos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/contactos/?page=1&page_size=10",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", ""],
+          "query": [
+            { "key": "page",      "value": "1" },
+            { "key": "page_size", "value": "10" }
+          ]
+        },
+        "description": "Obtiene el listado paginado de contactos activos con nombre y teléfonos."
+      }
+    },
+    {
+      "name": "2. Buscar Contacto por nombre",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/contactos/?search=Tony&page=1&page_size=10",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", ""],
+          "query": [
+            { "key": "search",    "value": "Tony" },
+            { "key": "page",      "value": "1" },
+            { "key": "page_size", "value": "10" }
+          ]
+        },
+        "description": "Busca contactos filtrando por nombre o apellidos."
+      }
+    },
+    {
+      "name": "3. Buscar Contacto por teléfono",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/contactos/?search=5591234567&page=1&page_size=10",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", ""],
+          "query": [
+            { "key": "search",    "value": "5591234567" },
+            { "key": "page",      "value": "1" },
+            { "key": "page_size", "value": "10" }
+          ]
+        },
+        "description": "Busca contactos filtrando por número de teléfono."
+      }
+    },
+    {
+      "name": "4. Crear Contacto (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"contacto\": {\n    \"nombre\": \"Tony\",\n    \"apellidos\": \"Stark\",\n    \"fecha_nacio\": \"1970-05-29\",\n    \"direccion\": {\n      \"calle\": \"Av. Insurgentes Sur\",\n      \"numero_exterior\": \"1602\",\n      \"numero_interior\": \"10B\",\n      \"colonia\": \"Crédito Constructor\",\n      \"municipio\": \"Benito Juárez\",\n      \"estado\": \"Ciudad de México\",\n      \"referencias\": \"Edificio Torre Stark, frente al Parque Hundido\"\n    },\n    \"telefonos\": [\n      {\n        \"tipo\": 2,\n        \"alias\": \"Celular Stark\",\n        \"numero\": \"5591234567\"\n      },\n      {\n        \"tipo\": 1,\n        \"alias\": \"Malibu Mansion\",\n        \"numero\": \"5598765432\"\n      }\n    ]\n  }\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{base_url}}/contactos/",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", ""]
+        },
+        "description": "Crea un contacto nuevo con dirección y teléfonos anidados.\n\nPara probar con fotografía, agrega el campo 'fotografia' en el body con un string base64.\n\nPuedes convertir tu imagen a base64 en: https://www.base64-image.de"
+      }
+    },
+    {
+      "name": "5. Detalle de Contacto (GET)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/contactos/{{contacto_id}}/",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", "{{contacto_id}}", ""]
+        },
+        "description": "Recupera el detalle completo de un contacto: datos, dirección y teléfonos activos."
+      }
+    },
+    {
+      "name": "6. Actualizar Contacto (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"contacto\": {\n    \"nombre\": \"Tony\",\n    \"apellidos\": \"Stark Potts\",\n    \"fecha_nacio\": \"1970-05-29\",\n    \"direccion\": {\n      \"calle\": \"Blvd. Manuel Ávila Camacho\",\n      \"numero_exterior\": \"40\",\n      \"numero_interior\": \"PH\",\n      \"colonia\": \"Lomas de Chapultepec\",\n      \"municipio\": \"Miguel Hidalgo\",\n      \"estado\": \"Ciudad de México\",\n      \"referencias\": \"Penthouse Torre Stark II, portón negro\"\n    },\n    \"telefonos\": [\n      {\n        \"tipo\": 2,\n        \"alias\": \"Celular Actualizado\",\n        \"numero\": \"5599999999\"\n      }\n    ]\n  }\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "{{base_url}}/contactos/{{contacto_id}}/",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", "{{contacto_id}}", ""]
+        },
+        "description": "Actualiza los datos completos del contacto. Los teléfonos anteriores se desactivan y se crean los nuevos."
+      }
+    },
+    {
+      "name": "7. Eliminar Contacto (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/contactos/{{contacto_id}}/",
+          "host": ["{{base_url}}"],
+          "path": ["contactos", "{{contacto_id}}", ""]
+        },
+        "description": "Eliminar contacto — se marca como inactivo, no se elimina de la BD."
+      }
+    }
+  ]
+}
