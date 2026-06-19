@@ -78,7 +78,7 @@ En la raíz del proyecto encontrarás el archivo `Practica_Agenda_API.postman_co
 | Método | URL | Descripción |
 |--------|-----|-------------|
 | GET | `/api/contactos/` | Listado paginado de contactos |
-| GET | `/api/contactos/?search=tony` | Búsqueda por nombre, apellidos o teléfono |
+| GET | `/api/contactos/?search=` | Búsqueda por nombre, apellidos o teléfono |
 | POST | `/api/contactos/` | Crear contacto |
 | GET | `/api/contactos/<id>/` | Detalle del contacto |
 | PUT | `/api/contactos/<id>/` | Actualizar contacto |
