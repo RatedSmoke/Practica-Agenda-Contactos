@@ -13,7 +13,7 @@ API REST desarrollada con Django REST Framework.
 
 ### 1. Clonar el repositorio
 ```bash
-git clone <url>
+git clone https://github.com/RatedSmoke/Practica-Agenda-Contactos.git
 cd practica_agenda
 ```
 
