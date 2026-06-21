@@ -48,17 +48,28 @@ ALTER DATABASE nombre_de_tu_bd OWNER TO nombre_de_tu_usuario;
 
 > Usa los mismos valores que pongas en tu archivo `.env`
 
-### 6. Aplicar migraciones
+### 6. Aplicar migraciones de Django
 ```bash
 python manage.py migrate
 ```
 
-### 7. Llenar catálogo de Estados
+### 7. Crear migraciones de las apps del proyecto
+```bash
+python manage.py makemigrations catalogos
+python manage.py makemigrations agenda
+```
+
+### 8. Aplicar migraciones de las apps del proyecto
+```bash
+python manage.py migrate
+```
+
+### 9. Llenar catálogo de Estados
 ```bash
 python manage.py cargar_estados
 ```
 
-### 8. Correr el servidor
+### 10. Correr el servidor
 ```bash
 python manage.py runserver
 ```
